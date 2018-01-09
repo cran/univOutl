@@ -23,9 +23,13 @@ LocScaleB(x, k=3, method='MAD',  weights=NULL, id=NULL,
   \item{method}{
 		character identifying how to estimate the scale of the distribution. Available choices are:
 		
-   	   \code{method='IQR'} for using the Inter-Quartile Range; 
+   	   \code{method='IQR'} for using the Inter-Quartile Range, i.e. Q75-Q25; 
+ 
+  	   \code{method='IDR'} for using the Inter-Decile Range; i.e. Q90-Q10 
 		 		   	   
 		\code{method='MAD'} for using the Median Absolute Deviation;
+
+		\code{method='Gini'} robust scale estimate based on Gini's Mean Difference (see  \code{\link[Hmisc]{GiniMd}}); 
 		
 		\code{method='ScaleTau2'} robust tau-estimate of univariate scale, as proposed by Maronna and Zamar (2002) (see also\code{\link[robustbase]{scaleTau2}}); 
 		
@@ -39,7 +43,7 @@ LocScaleB(x, k=3, method='MAD',  weights=NULL, id=NULL,
 }
 
   \item{weights}{
-		Optional numeric vector that provides weights associated to observations. Only nonnegative weights  are allowed. Note that weights can only be used when \code{method=`MAD'}, \code{method=`IQR'} or \code{method=`dQ'}.
+		Optional numeric vector that provides weights associated to observations. Only nonnegative weights  are allowed. Note that weights can only be used when \code{method='MAD'}, \code{method='IQR'} or \code{method='dQ'}.
 }
   \item{id}{
 Optional numeric or character vector, with identifiers of units in \code{x}. If \code{id=NULL} (deafult) units' identifiers will be set equal to their position in \code{x}.
@@ -61,11 +65,10 @@ Logical, if \code{TRUE} the output will save all the relevant information for ou
 \details{
 The intervals are derived by considering the median as a robust location estimate while different robust scale estimators are considered:
 
-\deqn{[Q_2 - k \times \tilde{s}_L; \quad Q_2 + k \times \tilde{s}_R]}{ [Q2 - k*s_L; Q2  + k*s_M] }
+\deqn{[Q_2 - k \times \tilde{s}_L; \quad Q_2 + k \times \tilde{s}_R]}{ [Q2 - k*s_L; Q2  + k*s_R] }
 
-\eqn{Q_2}{Q2} is the median, while \eqn{\tilde{s} = \tilde{s}_L = \tilde{s}_R}{s = s_L = S_R} is a robust scale estimate. 
-
-When \code{method='dQ'}
+\eqn{Q_2}{Q2} is the median, while \eqn{\tilde{s}_L}{ s_L} and \eqn{ \tilde{s}_R}{S_R} are robust scale estimates. 
+With most of the methods \eqn{\tilde{s}_L=\tilde{s}_R}{ s_L=s_L} with exception of \code{method='dQ'} where:
 
 \deqn{\tilde{s}_L = (Q_2 - Q_1)/0.6745 \qquad \mbox{and} \qquad \tilde{s}_R = (Q_3 - Q_2)/0.6745}{s_L = (Q2 - Q1)/0.6745  and s_R = (Q3 - Q2)/0.6745}
 
@@ -75,9 +78,9 @@ With \code{method='AdjOut'} the following estimates are considered:
 
 being \eqn{f_R}{fR} and \eqn{f_L}{fL} derived starting from the fences of the adjusted boxplot (Hubert and Vandervieren, 2008; see \code{\link[robustbase]{adjboxStats}}). 
 
-When weights are available (passed via the argument \code{weights}) then they are used in the computation of the quartiles. In particular, the quartiles are derived using the function  \code{\link[Hmisc]{wtd.quantile}} in the package \pkg{Hmisc}. Note that their use is allowed just with \code{method = 'IQR'}, \code{method = 'dQ'} or \code{method = 'AdjOut'}.
+When weights are available (passed via the argument \code{weights}) then they are used in the computation of the quartiles. In particular, the quartiles are derived using the function  \code{\link[Hmisc]{wtd.quantile}} in the package \pkg{Hmisc}. Note that their use is allowed just with \code{method='IQR'}, \code{method='dQ'} or \code{method='AdjOut'}.
 
-The 'score' variable reported in the the \code{data} dataframe when \code{return.dataframe=TRUE} is the standardized score derived as (x - Median)/scale.  
+The `score' variable reported in the the \code{data} dataframe when \code{return.dataframe=TRUE} is the standardized score derived as (x - Median)/scale.  
 }
 
 \value{
@@ -119,7 +122,7 @@ Marcello D'Orazio \email{mdo.statmatch@gmail.com}
 
 
 \seealso{
-\code{\link[stats]{mad}}, \code{\link[robustbase]{scaleTau2}}, \code{\link[robustbase]{Qn}}, \code{\link[robustbase]{Sn}}
+\code{\link[stats]{mad}}, \code{\link[robustbase]{scaleTau2}}, \code{\link[robustbase]{Qn}}, \code{\link[robustbase]{Sn}}, \code{\link[Hmisc]{GiniMd}}
 }
 \examples{
 
