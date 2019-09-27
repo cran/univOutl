@@ -27,14 +27,14 @@ Optional numeric or character vector, with identifiers of units. If \code{id=NUL
 Optional numeric vector providing a measure of the importance of a ratio. If \code{size = NULL} the size measure is the maximum value between the numerator and the denominator of each ratio (makes sense if both the variables are observed using the same unit of measure). Observations' importance is also controlled by the argument \code{U}.
 }
   \item{U}{
-Numeric, constant with \eqn{0 < U \leq 1}{0<U<=1} controlling importance of each unit, in practice the final size measure is derived as (size^U). Commonly used values are 0.4, 0.5 or 1.
+Numeric, constant with \eqn{0 < U \leq 1}{0<U<=1} controlling importance of each unit, in practice the final size measure is derived as (size^U). Commonly used values are 0.4, 0.5 or 1 (default).
 }
 
   \item{size.th}{
 Numeric, size threshold. Can be specified when a size measure is used. In such a case just outliers with a size greater than the threshold will be returned. Note that when argument \code{U} is not set equal to 1, then the final threshold will be \code{size.th^U}. 
 }
  \item{return.dataframe}{
-Logical, if \code{TRUE} the output will save all the relevant information for outlier detection in a dataframe with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `size' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise.  
+Logical, if \code{TRUE} the output will save all the relevant information for outlier detection in a dataframe with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `sizeU' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise.  
 }
 
 
@@ -66,7 +66,7 @@ When \code{return.dataframe=TRUE} the latter two components are substituted with
 }
 	
 \item{data}{
-	A dataframe with the not excluded observations with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `size' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise. The data frame will be sorted in decreasing manner according to size^U. Note that when a size threshold is provided then ONLY outliers with  (size^U) > (size.th^U)  will be returned. 
+	A dataframe with the not excluded observations with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `sizeU' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise. The data frame will be sorted in decreasing manner according to size^U. Note that when a size threshold is provided then ONLY outliers with  (size^U) > (size.th^U)  will be returned. 
 }
 
 
@@ -74,7 +74,7 @@ When \code{return.dataframe=TRUE} the latter two components are substituted with
 \references{
 Hidiroglou, M.A. and Berthelot, J.-M. (1986) `Statistical editing and Imputation for Periodic Business Surveys'. \emph{Survey Methodology}, Vol 12, pp. 73-83.
 
-Vanderviere, E. and Huber, M. (2008) `An Adjusted Boxplot for Skewed Distributions', \emph{Computational Statistics and Data Analysis}, 52, pp. 5186-5201.
+Hubert, M., and Vandervieren, E. (2008) `An Adjusted Boxplot for Skewed Distributions', \emph{Computational Statistics and Data Analysis}, 52, pp. 5186-5201.
 
 }
 \author{
@@ -84,8 +84,9 @@ Marcello D'Orazio \email{mdo.statmatch@gmail.com}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[univOutl]{HBmethod}}, \code{\link[univOutl]{boxB}},\code{\link[robustbase]{adjboxStats}}
+\code{\link[univOutl]{HBmethod}}, \code{\link[univOutl]{plot4ratios}}, \code{\link[univOutl]{boxB}},\code{\link[robustbase]{adjboxStats}}
 }
+
 \examples{
 
 set.seed(444)

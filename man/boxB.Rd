@@ -24,7 +24,7 @@ Note that when \code{method="adjbox"} then \code{k} is set automatically equal t
 		Character, identifies the method to be used: \code{method="resistant"} provides the `standard' boxplot fences; \code{method="asymmetric"} is a modification of standard method to deal with (moderately) skewed data; \code{method="adjbox"} uses Hubert and Vandervieren (2008) adjusted boxplot for skewed distributions.
 }
   \item{weights}{
-		Optional numeric vector with units' weights associated to observations of \code{x}. Only nonnegative weights are allowed. Weights are used in estimating the quartiles (see Details).
+		Optional numeric vector with units' weights associated to the observations in \code{x}. Only nonnegative weights are allowed. Weights are used in estimating the quartiles (see Details).
 }
   \item{id}{
 Optional vector with identifiers of units in \code{x}. If missing (\code{id=NULL}, default) the identifiers will be set equal to the positions in the vector (i.e. \code{id=1:length(x)}). 
@@ -86,7 +86,7 @@ The identifiers or positions (when \code{id=NULL}) of units in \code{x} detected
 \references{
 McGill, R., Tukey, J. W. and Larsen, W. A. (1978) `Variations of box plots'. \emph{The American Statistician}, 32, pp. 12-16.
 
-Vanderviere, E. and Huber, M. (2008) `An Adjusted Boxplot for Skewed Distributions', \emph{Computational Statistics and Data Analysis}, 52, pp. 5186-5201.
+Hubert, M., and Vandervieren, E. (2008) `An Adjusted Boxplot for Skewed Distributions', \emph{Computational Statistics and Data Analysis}, 52, pp. 5186-5201.
 
 }
 \author{

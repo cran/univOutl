@@ -1,4 +1,4 @@
-HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4, 
+HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4, pct=0.25, 
                     id=NULL, std.score=FALSE, return.dataframe=FALSE)
 {
 
@@ -30,10 +30,13 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4,
     mdn.rr <- median(rr)
 
     sc <- ifelse((rr < mdn.rr), (1 - mdn.rr/rr), (rr/mdn.rr - 1))
-    E <- sc * (pmax(yy1, yy2)) ^ U
+    sizeU <- (pmax(yy1, yy2)) ^ U
+    E <- sc * sizeU
     
     # compute bounds for scores
-    q.E <- quantile(x = E, probs = c(0.25, 0.50, 0.75))
+    # q.E <- quantile(x = E, probs = c(0.25, 0.50, 0.75))
+    q.E <- quantile(x = E, probs = c(pct, 0.50, (1-pct)))
+    
     if(all(abs(q.E)<1e-06)) stop("Quartiles of E scores are all equal to 0")
     
     message('MedCouple skewness measure of E scores: ', round(robustbase::mc(E), 4))
@@ -42,8 +45,9 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4,
     dq3 <- max( (q.E[3] - q.E[2]), abs(A * q.E[2]) )
 
     if(std.score){
-        std.Escore <- (E - q.E[2])/dq1*0.6745
-        std.Escore[E >= q.E[2]] <- c((E - q.E[2])/dq3*0.6745)[E >= q.E[2]]
+        ncost <- qnorm(1-pct)
+        std.Escore <- (E - q.E[2])/dq1*(1/ncost)
+        std.Escore[E >= q.E[2]] <- c((E - q.E[2])/dq3*(1/ncost))[E >= q.E[2]]
     }
 
     # identifies outliers
@@ -71,7 +75,7 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4,
         df.outl <- data.frame(id=id[!tst],
                               yt1=yt1[!tst],
                               yt2=yt2[!tst],
-                              ratio=rr, Escore=E)
+                              ratio=rr, sizeU=sizeU, Escore=E)
         if(std.score) df.outl$std.Escore <- std.Escore
         df.outl$outliers <- as.integer(outl)
         
@@ -82,5 +86,5 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4,
         
         else fine1 <- list(excluded=discard, outliers = lab[outl])
     }
-    c(fine0, fine1)
+    c(fine0, fine1, call=match.call())
 }

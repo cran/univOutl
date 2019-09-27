@@ -75,12 +75,12 @@ ratioSize <- function(numerator, denominator, id=NULL,
     else{
         if(is.null(size) ) imp <- pmax(yy0, yy1) ^ U
         else imp <- size^U
-        sub$size <- imp
+        sub$sizeU <- imp
         sub <- sub[order(imp, decreasing=TRUE), ]
         # sub <- sub[sub$outlier, ]
         
         if(!is.null(size.th)) {
-            sub <- sub[((sub$size > (size.th^U)) & (sub$outliers==1)), ]
+            sub <- sub[((sub$sizeU > (size.th^U)) & (sub$outliers==1)), ]
         }
         if(return.dataframe){
             fine <- c(fine0, list(excluded=df.no.outl, 
@@ -91,5 +91,5 @@ ratioSize <- function(numerator, denominator, id=NULL,
                      outliers=sub$id[sub$outliers==1]))
         }
     }
-    fine
+    c(fine, call=match.call())
 }
