@@ -1,5 +1,5 @@
 HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4, pct=0.25, 
-                    id=NULL, std.score=FALSE, return.dataframe=FALSE)
+                    id=NULL, std.score=FALSE, return.dataframe=FALSE, adjboxE=FALSE)
 {
 
     # check input vectors
@@ -65,8 +65,21 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4, pct=0.25,
         message('Outliers found in the left tail: ', sum(E < low.b))
         message('Outliers found in the right tail: ', sum(E > up.b))
     }
-    # output
     fine0 <- list(median.r = mdn.rr, quartiles.E=q.E, bounds.E=c(low.b, up.b))
+    
+    # if adjboxE=TRUE identifies outliers also with skew-adj boxplot on E-scores
+    if(adjboxE){
+        out.bb <- boxB(x = E, k = 1.5, method = "adjbox")
+        message('Outliers found in the left tail with adj. boxplot on E: ', sum(E < out.bb$fences[1]))
+        message('Outliers found in the rights tail with adj. boxplot on E: ', sum(E > out.bb$fences[2]))
+        
+        outlBB <- rep(0, length(outl))
+        if(length(out.bb$outliers)>0) outlBB[out.bb$outliers] <- 1
+        fine0$fences.E.BB <- out.bb$fences     
+    }
+    
+    # output
+    
     if(return.dataframe){
         discard <- data.frame(id=id[tst],
                               yt1=yt1[tst],
@@ -79,12 +92,17 @@ HBmethod <- function(yt1, yt2, U=0.5, A=0.05, C=4, pct=0.25,
         if(std.score) df.outl$std.Escore <- std.Escore
         df.outl$outliers <- as.integer(outl)
         
+        if(adjboxE) df.outl$outliersBB <- outlBB
         fine1 <- list(excluded=discard, data = df.outl)
     }
     else{
         if(sum(outl)==0) fine1 <- list(excluded=discard, outliers = integer(0))   
-        
         else fine1 <- list(excluded=discard, outliers = lab[outl])
+        
+        if(adjboxE) {
+            if(sum(outlBB)==0) fine1$outliersBB <- integer(0)
+            else fine1$outliersBB <- lab[outlBB==1]
+        }
     }
     c(fine0, fine1, call=match.call())
 }
