@@ -1,3 +1,6 @@
+0.3	Slight modification of boxB and LocScaleB to return outliesr seprated by tail of the distribution (thanks to Eliot McGinnis
+        for suggesting the improvement and the modified code) 
+
 0.2	Added a new function skew.misc() to calculate skewness measures.
 	Added possibility in HBmethod() to detect outliers in Escores using boxplot adjusted for skewness
 	Added new method in LocScaleB() to account for slightly skewed distributions

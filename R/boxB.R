@@ -73,6 +73,11 @@ boxB <- function(x, k=1.5, method='asymmetric', weights=NULL, id=NULL,
     names(low.b) <- 'low'
     names(up.b) <- 'up'
     outl <- (yy < low.b) | (yy > up.b)
+    ###### distinction between outliers according to the tail
+    lower <- (yy < low.b)
+    upper <- (yy > up.b)
+    ####
+    
     if(sum(outl)==0) message('No outliers found')
     else{
         message('No. of outliers in left tail: ', sum(yy < low.b))
@@ -88,7 +93,8 @@ boxB <- function(x, k=1.5, method='asymmetric', weights=NULL, id=NULL,
     }
     else{
         fine <- list(quartiles=qq, fences=fences,
-                     excluded=to.check, outliers=lab[outl])
+                     excluded=to.check, outliers=lab[outl],
+                     lowOutl=lab[lower], upOutl=lab[upper])
     }
     fine
 }

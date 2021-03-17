@@ -142,6 +142,10 @@ LocScaleB <- function(x, k=3, method='MAD',  weights=NULL, id=NULL,
     
     # identifies outliers
     outl <- (yy < low.b) | (yy > up.b)
+    ###### distinction between outliers according to the tail
+    lower <- (yy < low.b)
+    upper <- (yy > up.b)
+    ####
     # outl <- (zz < -k) | (zz > k)
     if(sum(outl)==0) message('No outliers found')
     else{
@@ -180,7 +184,8 @@ LocScaleB <- function(x, k=3, method='MAD',  weights=NULL, id=NULL,
             fine1 <- list(excluded=to.check, outliers=integer(0)) 
         }
         else{
-            fine1 <- list(excluded=to.check, outliers=lab[outl]) 
+            fine1 <- list(excluded=to.check, outliers=lab[outl], 
+                          lowOutl=lab[lower], upOutl=lab[upper]) 
         }    
     } 
     c(fine0, fine1)
