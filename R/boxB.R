@@ -51,11 +51,16 @@ boxB <- function(x, k=1.5, method='asymmetric', weights=NULL, id=NULL,
     }
     if(method == 'adjbox'){
         warning("With method='adjbox' the argument k is set equal to 1.5")
-        medc <- robustbase::mc(yy)
+        ck <- inherits( try( robustbase::mc(yy), silent=TRUE),  "try-error") 
+        if(ck) medc <- robustbase::mc(yy, doScale = TRUE)
+        else medc <- robustbase::mc(yy, doScale = FALSE)
+        
+        # medc <- robustbase::mc(yy)
         message('The MedCouple skewness measure is: ', round(medc, 4))
         
         if(is.null(weights)){
-            aa <- robustbase::adjboxStats(x=yy)
+            if(ck) aa <- robustbase::adjboxStats(x=yy, doScale = TRUE)
+            else aa <- robustbase::adjboxStats(x=yy, doScale = FALSE)
             low.b <- aa$fence[1]
             up.b <- aa$fence[2]    
         }

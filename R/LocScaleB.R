@@ -56,10 +56,15 @@ LocScaleB <- function(x, k=3, method='MAD',  weights=NULL, id=NULL,
     }
     
     if(tolower(method) == 'adjout'){
-        medc <- robustbase::mc(yy)
+        
+        ck <- inherits( try( robustbase::mc(yy), silent=TRUE),  "try-error") 
+        if(ck) medc <- robustbase::mc(yy, doScale = TRUE)
+        else medc <- robustbase::mc(yy, doScale = FALSE)
         message('The MedCouple skewness measure is: ', round(medc, 4))
+        
         if(is.null(weights)){
-            aa <- robustbase::adjboxStats(x=yy)
+            if(ck) aa <- robustbase::adjboxStats(x=yy, doScale = TRUE)
+            else aa <- robustbase::adjboxStats(x=yy, doScale = FALSE)
             low <- aa$fence[1]
             up <- aa$fence[2]    
         }
