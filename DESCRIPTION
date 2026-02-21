@@ -1,14 +1,25 @@
 Package: univOutl
 Type: Package
 Title: Detection of Univariate Outliers
-Version: 0.4
-Author: Marcello D'Orazio
+Version: 0.5.0
+Date: 2026-02-20
+Encoding: UTF-8
+Author: Marcello D'Orazio [aut, cre]
 Maintainer: Marcello D'Orazio <mdo.statmatch@gmail.com>
-Depends: robustbase, Hmisc
-Description: Well known outlier detection techniques in the univariate case. Methods to deal with skewed distribution are included too. The Hidiroglou-Berthelot (1986) method to search for outliers in ratios of historical data is implemented as well. When available, survey weights can be used in outliers detection.
+Authors@R: person(given = "Marcello",
+                  family = "D'Orazio",
+                  role = c("aut", "cre"),
+                  email = "mdo.statmatch@gmail.com")
+Depends: R (>= 3.6.0)
+Imports: robustbase, Hmisc
+Description: Provides well-known techniques for detecting univariate
+    outliers. Methods for handling skewed distributions are included.
+    The Hidiroglou-Berthelot (1986) method for detecting outliers in
+    ratios of historical data is also implemented. When available,
+    survey weights can be incorporated in the detection process.
 License: GPL (>= 2)
 URL: https://github.com/marcellodo/univOutl
 NeedsCompilation: no
-Packaged: 2022-05-31 05:51:24 UTC; pc
+Packaged: 2026-02-20 18:44:46 UTC; marc&gio
 Repository: CRAN
-Date/Publication: 2022-05-31 06:20:02 UTC
+Date/Publication: 2026-02-21 06:10:02 UTC
