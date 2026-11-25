@@ -6,7 +6,7 @@
 Detection of Univariate Outliers.
 }
 \description{
-Well known outlier detection techniques in the univariate case. Ratios of two variables are covered too. When available, survey weights can be considered.
+Well-known univariate outlier detection techniques, including methods for ratios of two correlated variables or of the same variable observed in two subsequant time occasions (panel data). Optional support for survey weights when available.
 }
 \details{
 The package provides few simple functions implementing well known outlier detection techniques in the univariate case. 

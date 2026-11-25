@@ -5,7 +5,7 @@ Calculates some skewness measures.
 }
 
 \description{
-The function calculates some skewness measures for the input vector data.  
+The function calculates some skewness measures for the input vector data. Units' weights are allowed.  
 }
 
 \usage{

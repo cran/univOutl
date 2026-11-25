@@ -1,8 +1,8 @@
 Package: univOutl
 Type: Package
 Title: Detection of Univariate Outliers
-Version: 0.5.0
-Date: 2026-02-20
+Version: 0.6.0
+Date: 2026-11-25
 Encoding: UTF-8
 Author: Marcello D'Orazio [aut, cre]
 Maintainer: Marcello D'Orazio <mdo.statmatch@gmail.com>
@@ -20,6 +20,6 @@ Description: Provides well-known techniques for detecting univariate
 License: GPL (>= 2)
 URL: https://github.com/marcellodo/univOutl
 NeedsCompilation: no
-Packaged: 2026-02-20 18:44:46 UTC; marc&gio
+Packaged: 2026-11-25 14:21:15 UTC; marc&gio
 Repository: CRAN
-Date/Publication: 2026-02-21 06:10:02 UTC
+Date/Publication: 2026-11-25 18:00:02 UTC

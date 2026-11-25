@@ -9,7 +9,9 @@ Identifies outliers on transformed ratios (centering with respect to their media
 }
 \usage{
 ratioSize(numerator, denominator, id=NULL,
-          size=NULL, U=1, size.th=NULL, return.dataframe=FALSE)
+          size=NULL, U=1, size.th=NULL, return.dataframe=FALSE, 
+          method = c("asymmetric2", "asymmetric", "adjbox", "resistant"),
+                      ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -21,7 +23,7 @@ ratioSize(numerator, denominator, id=NULL,
  Numeric vector with the values that go at denominator of the ratio
 }
   \item{id}{
-Optional numeric or character vector, with identifiers of units. If \code{id=NULL} units identifiers will be set equal to their positions in \code{x}.
+Optional numeric or character vector, with identifiers of units. If \code{id=NULL} units identifiers will be set equal to their positions.
 }
   \item{size}{
 Optional numeric vector providing a measure of the importance of a ratio. If \code{size = NULL} the size measure is the maximum value between the numerator and the denominator of each ratio (makes sense if both the variables are observed using the same unit of measure). Observations' importance is also controlled by the argument \code{U}.
@@ -36,12 +38,19 @@ Numeric, size threshold. Can be specified when a size measure is used. In such a
  \item{return.dataframe}{
 Logical, if \code{TRUE} the output will save all the relevant information for outlier detection in a dataframe with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `sizeU' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise.  
 }
+ \item{method}{
+Character, indicates the method used by \code{\link[univOutl]{boxB}} to search for potential outlies in the centered ratios. Allowed methods are "asymmetric2", "asymmetric", "adjbox", "resistant" and default is "asymmetric2"; see \code{\link[univOutl]{boxB}} for major details.
+}
+
+ \item{...}{
+Additional arguments that maybe needed by functions called internally. In particular search of outlier on centered rations is done using \code{\link[univOutl]{boxB}} function with argument \code{method = "asymmetric2"}, so it is possible to change the value of \code{k} (default is \code{k=1.5}.
+}
 
 
 }
 \details{
 
-This function searches for outliers starting from ratios \code{r=numerator/denominator}. At first the ratios are centered around their median, as in Hidiroglou Berthelot (1986) procedure (see \code{\link[univOutl]{HBmethod}}), then the outlier identification is based on the adjusted boxplot for skewed distribution (Hubert and Vandervieren 2008) (see \code{\link[robustbase]{adjboxStats}}).
+This function searches for outliers starting from ratios \code{r=numerator/denominator}. At first the ratios are centered around their median, as in Hidiroglou Berthelot (1986) procedure (see \code{\link[univOutl]{HBmethod}}), then the outlier identification is based on the Walker et al (2018) modified boxplot (see \code{\link[univOutl]{boxB}}).
 The subset of outliers is sorted in decreasing order according the size measure. If a size threshold is provided then just outliers with  (size^U) > (size.th^U)  will be returned. 
 
 }
@@ -66,7 +75,7 @@ When \code{return.dataframe=TRUE} the latter two components are substituted with
 }
 	
 \item{data}{
-	A dataframe with the not excluded observations with the following columns: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `sizeU' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise. The data frame will be sorted in decreasing manner according to size^U. Note that when a size threshold is provided then ONLY outliers with  (size^U) > (size.th^U)  will be returned. 
+	A data frame containing the units that were not excluded, sorted in decreasing order of \code{sizeU}. Its columns are: `id' (units' identifiers), `numerator', `denominator', `ratio' (= numerator/denominator), `c.ratio' (centered ratios, see Details), `sizeU' (size^U values) and finally `outliers', where value 1 indicates observations detected as an outlier and 0 otherwise. The data frame will be sorted in decreasing manner according to size^U. Note that when a size threshold is provided then ONLY outliers with  (size^U) > (size.th^U)  will be returned. 
 }
 
 
@@ -84,7 +93,7 @@ Marcello D'Orazio \email{mdo.statmatch@gmail.com}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link[univOutl]{HBmethod}}, \code{\link[univOutl]{plot4ratios}}, \code{\link[univOutl]{boxB}},\code{\link[robustbase]{adjboxStats}}
+\code{\link[univOutl]{HBmethod}}, \code{\link[univOutl]{plot4ratios}}, \code{\link[univOutl]{boxB}}
 }
 
 \examples{

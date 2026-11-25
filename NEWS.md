@@ -1,3 +1,11 @@
+# univOutl 0.6.0
+## Improvements
+* The `boxB()` function allows changing the value of k to search outliers with some asymmetric methods. The log transformation of input data is no longer allowed.
+* The `LocScale()` function has no longer the method "adjout". 
+* The `ratioSize()` function now uses `boxB()` function to detect for potential outlier in the centered ratios.
+* Minor changes to the remaining functions (added checks on the inputs and management of potential strange cases.)
+
+
 # univOutl 0.5.0
 
 ## New features

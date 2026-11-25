@@ -9,7 +9,7 @@ This function implements the method proposed by Hidiroglou and Berthelot (1986) 
 }
 \usage{
 HBmethod(yt1, yt2, U=0.5, A=0.05, C=4, pct=0.25,
-         id=NULL, std.score=FALSE, return.dataframe=FALSE, adjboxE=FALSE)
+         id=NULL, std.score=FALSE, return.dataframe=FALSE)
 
 }
 
@@ -43,11 +43,9 @@ Logical, if \code{TRUE} the output will include a standardized score variable (s
   \item{return.dataframe}{
 Logical, if \code{TRUE} the output will save all the relevant information for outlier detection in a dataframe with the following columns: 'id' (units' identifiers), `yt1', `yt2', `ratio' (= yt1/yt2), `sizeU' (=max(yt1, yt2)^U),`Escore' (the E scores, see Details), `std.Escore' (the standardized E scores when \code{std.score=TRUE}, see Details) and finally `outliers', where value 1 indicates observations detected as an outlier, 0 otherwise.  
 }
- \item{adjboxE}{
-Logical (default \code{FALSE}), if \code{TRUE} an additional search of outliers will be done on the E-scores using the boxplot adjusted for skewness as implemented in the function \code{\link[univOutl]{boxB}} when run with with argument \code{method = "adjbox"}.
-}
 
 }
+
 
 \details{
 The method proposed by Hidiroglou and Berthelot (1986) to identify outliers in periodic data consists in deriving a score variable based on the ratios \eqn{r_i = y_{i,t2}/y_{i,t1}}{r_i = y_{i,t2}/y_{i,t1}} (\code{yt2/yt1}) with \eqn{i=1,2,\ldots, n}{i=1,2,...,n} being \eqn{n}{n} the number of observations after discarding NAs and 0s in both \code{yt1} and \code{yt2}.
@@ -83,7 +81,6 @@ When \code{std.score=TRUE} a standardized score is derived in the following mann
 
 The constant g is set equal to \code{qnorm(1-pct)} and  makes \eqn{d_{Q1}}{d_{Q1}} and  \eqn{d_{Q3}}{d_{Q3}} approximately unbiased estimators when the E scores follow the normal distribution.
 
-When \code{adjboxE = TRUE} outliers on the E scores will all be searched using the boxplot adjusted for skewness as implemented in the function \code{\link[univOutl]{boxB}} when run with with argument \code{method = "adjbox"}.
 }
 
 \value{
@@ -92,14 +89,12 @@ A list whose components depend on the \code{return.dataframe} argument. When \co
 \item{median.r}{the median of the ratios}
 \item{quartiles.E}{Quartiles of the E score}
 \item{bounds.E}{Bounds of the interval of the E score, values outside are considered outliers.}
+\item{skew.E}{Medcouple and Bowley's skewness measures of the E scores.}
 \item{excluded}{
 	The identifiers or positions (when \code{id=NULL}) of units in both \code{yt1} and \code{yt2} that are excluded by the outliers detection, i.e. NAs and 0s.
 }
 \item{outliers}{
 The identifiers or positions (when \code{id=NULL}) of units in \code{yt1} or \code{yt2} identified as outliers.
-}
-\item{outliersBB}{
-The identifiers or positions (when \code{id=NULL}) of units in \code{yt1} or \code{yt2} identified as outliers by applying the boxplot adjusted for skewness to the E scores. This component appears in the output only when \code{adjboxE = TRUE}.
 }
 
 When \code{return.dataframe=TRUE}, the first three components remain the same with, in addition, two dataframes:
@@ -108,7 +103,7 @@ When \code{return.dataframe=TRUE}, the first three components remain the same wi
 	A dataframe with the subset of observations excluded. The data frame has the following columns: 'id' (units' identifiers), 'yt1' columns 'yt2'}
 
 \item{data}{
-	A dataframe with the the not excluded observations and the following columns: `id' (units' identifiers), `yt1', `yt2', `ratio' (= yt1/yt2), `sizeU' (=max(yt1, yt2)^U),`Escore' (the E scores, see Details), `std.Escore' (the standardized E scores when \code{std.score=TRUE}, see Details) and `outliers', where value 1 indicates observations detected as an outlier, 0 otherwise. in addition the column `outliersBB' will also be included when \code{adjboxE = TRUE}. 
+	A dataframe with the the not excluded observations and the following columns: `id' (units' identifiers), `yt1', `yt2', `ratio' (= yt1/yt2), `sizeU' (=max(yt1, yt2)^U),`Escore' (the E scores, see Details), `std.Escore' (the standardized E scores when \code{std.score=TRUE}, see Details) and `outliers', where value 1 indicates observations detected as an outlier, 0 otherwise.
 }
 
 }

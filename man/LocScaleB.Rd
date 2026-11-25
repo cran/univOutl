@@ -2,10 +2,10 @@
 \alias{LocScaleB}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Univariate outlier detection with bounds based on robust location and scale estimates
+Univariate outlier detection with bounds based on robust location and scale estimates of a Gaussian distribution.
 }
 \description{
-This function identifies outliers in the tails of a distribution by detecting the observations outside the bounds built using a robust estimate of both location and scale parameters.  
+This function detects tail outliers for an approximately Gaussian distribution (or a log-normal distribution via a log transformation) by flagging observations outside bounds derived from robust location and scale estimates. Slight asymmetry is allowed.
 }
 \usage{
 LocScaleB(x, k=3, method='MAD',  weights=NULL, id=NULL, 
@@ -15,7 +15,7 @@ LocScaleB(x, k=3, method='MAD',  weights=NULL, id=NULL,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-		Numeric vector that will be searched for outliers.
+		Numeric data vector on which outlier detection will be performed.
 }
   \item{k}{
 		Nonnegative constant that determines the extension of bounds. Commonly used values are 2, 2.5 and 3 (default).
@@ -40,8 +40,7 @@ LocScaleB(x, k=3, method='MAD',  weights=NULL, id=NULL,
 		When \code{method='dQ'} the estimated scale for the left tail is (Q2-Q1)/0.6745, while for the right tail it is considered (Q3-Q2)/0.6745 (Q2 is the median); this double estimate should be able to account for slight skewness.
 		
 		When \code{method='dD'} the estimated scale for the left tail is (P50-P10)/1.2816, while for the right tail it is considered (P90-P50)/1.2816 (P50 is the median); this double estimate should be able to account for skewness.
-		
-		 Finally, when \code{method='AdjOut'}, bounds are based on the adjusted outlyingness method as proposed by Hubert and Van der Veeken (2008).
+
 }
 
   \item{weights}{
@@ -55,10 +54,10 @@ Optional numeric or character vector, with identifiers of units in \code{x}. If 
 	Values of \code{x} that will be excluded by the analysis. By default missing values (\code{exclude = NA})
 }
   \item{logt}{
-Logical, if \code{TRUE}, before searching outliers the \code{x} variable is log-transformed (\code{log(x+1)} is considered). Note that in this case that summary output (bounds, etc.) will refer to log-transformed variable.
+Logical, if \code{TRUE}, before searching outliers the \code{x} variable is transformed via \code{log(x+1)}, and summary outputs (such as bounds) are reported on that log-transformed scale. This assumes a shifted log-normal distribution in which log(x + 1) is approximately normal.
 }
   \item{return.dataframe}{
-Logical, if \code{TRUE} the output will save all the relevant information for outlier detection in a dataframe with the following columns: `id' (units' identifiers), `x', `log.x' (only if \code{logt=TRUE}), `weight' (only when argument \code{weights} is provided), `score' (the standardized scores, see Details) and, finally, `outliers', where value 1 indicates observations detected as an outlier, 0 otherwise.  
+Logical, if \code{TRUE} all the relevant information for outlier detection is saved in a dataframe with the following columns: `id' (units' identifiers), `x', `log.x' (only if \code{logt=TRUE}), `weight' (only when argument \code{weights} is provided), `score' (the standardized scores, see Details) and, finally, `outliers', where value 1 indicates observations detected as an outlier, 0 otherwise.  
 }
 
 
@@ -80,13 +79,7 @@ and
 
 Note that when \code{method='dQ'} or \code{method='dD'} the function calculates and prints a the Bowley's coefficient of skewness, that uses Q1, Q2 and Q3 (they are replaced by respectively P10, P50 and P90 when \code{method='dD'}). 
 
-With \code{method='AdjOut'} the following estimates are considered: 
-
-\deqn{\tilde{s}_L = (Q_2 - f_L) \qquad \mbox{and} \qquad \tilde{s}_R = (f_R - Q_2)}{s_L = (Q2 - fL) ands_R = (fR - Q2)}
-
-being \eqn{f_R}{fR} and \eqn{f_L}{fL} derived starting from the fences of the adjusted boxplot (Hubert and Vandervieren, 2008; see \code{\link[robustbase]{adjboxStats}}). In addition the medcouple (\code{\link[robustbase]{mc}}) measure of skewness is calculated and printed on the screen.
-
-When weights are available (passed via the argument \code{weights}) then they are used in the computation of the quartiles. In particular, the quartiles are derived using the function  \code{\link[Hmisc]{wtd.quantile}} in the package \pkg{Hmisc}. Note that their use is allowed just with \code{method='IQR'}, \code{method='IDR'}, \code{method='dQ'}, \code{method='dD'} or   \code{method='AdjOut'}.
+When weights are available (passed via the argument \code{weights}) then they are used in the computation of the quartiles. In particular, the quartiles are derived using the function  \code{\link[Hmisc]{wtd.quantile}} in the package \pkg{Hmisc}. Note that their use is allowed just with \code{method='IQR'}, \code{method='IDR'}, \code{method='dQ'}, \code{method='dD'}.
 
 The `score' variable reported in the the \code{data} dataframe when \code{return.dataframe=TRUE} is the standardized score derived as (x - Median)/scale.  
 }
@@ -122,13 +115,9 @@ When \code{return.dataframe=TRUE} the latter two components are substituted with
 }
 \references{
 
-Hubert, M. and Van der Veeken, S. (2008) `Outlier Detection for Skewed Data'. \emph{Journal of Chemometrics}, 22, pp. 235-246.
-
 Maronna, R.A. and Zamar, R.H. (2002) `Robust estimates of location and dispersion of high-dimensional datasets' \emph{Technometrics}, 44, pp. 307-317.
 
 Rousseeuw, P.J. and Croux, C. (1993) `Alternatives to the Median Absolute Deviation', \emph{Journal of the American Statistical Association} 88, pp. 1273-1283.
-
-Vanderviere, E. and Huber, M. (2008) `An Adjusted Boxplot for Skewed Distributions', \emph{Computational Statistics & Data Analysis}, 52, pp. 5186-5201
 
 }
 \author{
@@ -156,7 +145,7 @@ out <- LocScaleB(x = x,  k = 3, method='MAD',
                  return.dataframe = TRUE)
 head(out$data)
 
-out <- LocScaleB(x = x, k = 3, method='AdjOut')
+out <- LocScaleB(x = x, k = 3, method='IQR')
 out$outliers
 
 
